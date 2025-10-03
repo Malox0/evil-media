@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <v-toolbar title="Evil Media">
+  <v-app-bar fixed title="Evil Media">
     <template #append>
       <v-btn icon="mdi-bell"></v-btn>
 
@@ -9,5 +9,5 @@
 
       <v-btn icon="mdi-account"></v-btn>
     </template>
-  </v-toolbar>
+  </v-app-bar>
 </template>

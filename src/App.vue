@@ -3,7 +3,7 @@ import AppLayout from '@/components/AppLayout.vue'
 </script>
 
 <template>
-  <v-app>
+  <v-app theme="dark">
     <AppLayout />
   </v-app>
 </template>
