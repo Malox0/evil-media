@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import IntroSection from '@/components/IntroSection.vue'
-import ListPosts from '@/components/posts/ListPosts.vue'
+import IntroSection from '../components/IntroSection.vue'
+import ListPosts from '../components/posts/ListPosts.vue'
 import { ref } from 'vue'
 const selected = ref<string>('Latest')
 </script>
@@ -17,5 +17,5 @@ const selected = ref<string>('Latest')
       </v-btn-toggle>
     </div>
   </div>
-  <ListPosts />
+  <ListPosts :disable-follow-btn="true" />
 </template>
