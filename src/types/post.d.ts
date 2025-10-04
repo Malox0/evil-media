@@ -5,4 +5,6 @@ export interface Post {
   title: string
   subTitle: string
   by: Follower
+  likes: number
+  commentsCount: number
 }

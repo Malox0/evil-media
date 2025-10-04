@@ -9,6 +9,5 @@ const count = ref(0)
     <v-btn icon variant="text">
       <v-icon> mdi-chat-outline </v-icon>
     </v-btn>
-    <p class="ml-1">{{ count }}</p>
   </div>
 </template>

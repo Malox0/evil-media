@@ -10,6 +10,5 @@ const count = ref(0)
     <v-btn @click="liked = !liked" icon variant="text">
       <v-icon>{{ liked ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
     </v-btn>
-    <span class="ml-1">{{ count }}</span>
   </div>
 </template>

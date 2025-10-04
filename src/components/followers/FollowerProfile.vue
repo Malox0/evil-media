@@ -52,12 +52,26 @@ onMounted(async () => {
         ><v-icon>mdi-map-marker</v-icon> {{ publicIp }}</v-card-text
       >
       <div class="d-flex flex-row justify-space-between">
-        <v-card-text class="font-weight-bold">{{ follower.followerCount }}</v-card-text>
-        <v-card-text class="ml-n6">Followers</v-card-text>
-        <v-card-text class="font-weight-bold">{{ follower.followingCount }}</v-card-text>
-        <v-card-text class="ml-n6">Following</v-card-text>
-        <v-card-text class="font-weight-bold"> {{ follower.postCount }} </v-card-text>
-        <v-card-text class="ml-n6">Posts</v-card-text>
+        <div class="d-flex align-center">
+          <v-card-text class="font-weight-bold mb-0 pr-1">
+            {{ follower.followerCount }}
+          </v-card-text>
+          <v-card-text class="mb-0">Followers</v-card-text>
+        </div>
+
+        <div class="d-flex align-center">
+          <v-card-text class="font-weight-bold mb-0 pr-1">
+            {{ follower.followingCount }}
+          </v-card-text>
+          <v-card-text class="mb-0">Following</v-card-text>
+        </div>
+
+        <div class="d-flex align-center">
+          <v-card-text class="font-weight-bold mb-0 pr-1">
+            {{ follower.postCount }}
+          </v-card-text>
+          <v-card-text class="mb-0">Posts</v-card-text>
+        </div>
       </div>
     </div>
   </v-card>

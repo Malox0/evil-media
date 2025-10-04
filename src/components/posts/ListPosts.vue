@@ -60,14 +60,25 @@ const posts = ref<Post[]>([
     title: 'Badass Gaming',
     subTitle: 'I shit myself when starting this application',
     by: followers.value[0]!,
+    likes: 2,
+    commentsCount: 2,
   },
   {
     id: 2,
     title: 'Johnny',
     subTitle: 'Johnny showed me how to add css here, what a nice guy.',
     by: followers.value[1]!,
+    likes: 4,
+    commentsCount: 2,
   },
-  { id: 3, title: 'Flying', subTitle: 'sucks', by: followers.value[2]! },
+  {
+    id: 3,
+    commentsCount: 2,
+    title: 'Flying',
+    subTitle: 'sucks',
+    by: followers.value[2]!,
+    likes: 8,
+  },
 ])
 </script>
 <template>

@@ -46,7 +46,9 @@ const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
       <v-divider class="ma-2" />
       <template v-slot:actions>
         <LikeButton class="ml-2"></LikeButton>
+        <span class="ml-n2">{{ post.likes }}</span>
         <CommentButton></CommentButton>
+        <span class="ml-n2">{{ post.commentsCount }}</span>
         <v-btn icon variant="text">
           <v-icon> mdi-share-variant</v-icon>
         </v-btn>

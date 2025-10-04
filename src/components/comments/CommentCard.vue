@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type Comment } from '../../types/comment'
+import LikeButton from '@/components/actions/LikeButton.vue'
 interface Props {
   comment: Comment
   disableFollowBtn: boolean
@@ -26,8 +27,12 @@ const props = withDefaults(defineProps<Props>(), {
       <v-card-text class="opacity-70 d-flex justify-end"> {{ comment.uploadDate }}</v-card-text>
     </div>
     <v-card-text class="text-subtitle-1">{{ comment.text }}</v-card-text>
-    <v-card-text v-card-text
-      >{{ comment.likes }} <span class="opacity-70">likes</span>
-    </v-card-text>
+
+    <div class="d-flex">
+      <v-card-text v-card-text
+        >{{ comment.likes }} <span class="opacity-70">likes</span>
+      </v-card-text>
+      <LikeButton />
+    </div>
   </v-card>
 </template>
