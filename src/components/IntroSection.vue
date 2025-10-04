@@ -2,7 +2,7 @@
 function scrollToPosts() {
   const el = document.getElementById('posts-section')
   if (el) {
-    const y = el.getBoundingClientRect().top + window.scrollY - 80 // 80px offset
+    const y = el.getBoundingClientRect().top + window.scrollY - 80
     window.scrollTo({ top: y, behavior: 'smooth' })
   }
 }

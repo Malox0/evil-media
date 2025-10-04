@@ -3,11 +3,16 @@ import LikeButton from '@/components/actions/LikeButton.vue'
 import CommentButton from '@/components/actions/CommentButton.vue'
 import UserCard from '@/components/user/UserCard.vue'
 import { ref } from 'vue'
-defineProps<{
+interface Props {
   key: number
   title: string
   subTitle: string
-}>()
+  disableFollowBtn?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  disableFollowBtn: false,
+})
 const followed = ref(false)
 const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
 </script>
@@ -17,7 +22,7 @@ const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
       v-bind="props"
       variant="outlined"
       color="surface-variant"
-      class="ma-8 pa-2 rounded-xl transition-slow"
+      class="mt-6 mb-6 pa-2 rounded-xl transition-slow"
       :style="isHovering ? 'transform: scale(1.02);' : ''"
       :elevation="isHovering ? 12 : 2"
     >
@@ -25,6 +30,7 @@ const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
         <UserCard />
 
         <v-btn
+          v-if="!disableFollowBtn"
           class="mr-2"
           :color="followed ? 'primary' : undefined"
           :variant="followed ? 'flat' : 'outlined'"
