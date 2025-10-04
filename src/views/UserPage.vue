@@ -9,7 +9,9 @@ const username = route.params.username as string
 const selected = ref<string>('Posts')
 </script>
 <template>
-  <v-btn to="/home" prepend-icon="mdi-arrow-left-thin" @click="MoveBack">go back</v-btn>
+  <v-btn to="/home" prepend-icon="mdi-arrow-left-thin" @click="MoveBack" class="mb-4">
+    go back
+  </v-btn>
   <UserProfile />
 
   <v-btn-toggle
