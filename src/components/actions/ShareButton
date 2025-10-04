@@ -1,0 +1,12 @@
+<script setup lang="ts">
+  import { ref } from 'vue'
+
+  const count = ref(0)
+</script>
+
+<template>
+  <v-btn>
+    <v-icon> mdi-chat-outline </v-icon>
+    <p class="ma-2">{{ count }}</p>
+  </v-btn>
+</template>
