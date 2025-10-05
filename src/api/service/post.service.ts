@@ -37,7 +37,6 @@ export async function getPosts(): Promise<Post[]> {
     throw new Error('No posts found')
   }
 
-  console.log('reading')
   return posts
 }
 

@@ -46,7 +46,7 @@ onMounted(async () => {
       >
       <v-card-text> {{ follower.description }}</v-card-text>
       <v-card-text class="opacity-70 mb-n4 mt-n4"
-        ><v-icon>mdi-calendar-blank-outline</v-icon> Joined {{ follower.createdOn }}</v-card-text
+        ><v-icon>mdi-calendar-blank-outline</v-icon> Joined {{ follower.createdAt }}</v-card-text
       >
       <v-card-text class="opacity-70 mb-n4 mt-n4"
         ><v-icon>mdi-map-marker</v-icon> {{ publicIp }}</v-card-text
