@@ -48,3 +48,23 @@ export async function getCommentById(id: number): Promise<Comment> {
   }
   return Promise.resolve(comment)
 }
+
+export async function getCommentsByPost(id: number) {
+  const mockComments = await getComments()
+  const comments = mockComments.filter((t) => t.post.id == id)
+
+  if (comments.length === 0) {
+    throw new Error(`Nobody commented on this yet`)
+  }
+  return Promise.resolve(comments)
+}
+
+export async function getCommentsByUsername(username: string) {
+  const mockComments = await getComments()
+  const comments = mockComments.filter((t) => t.by.username == username)
+
+  if (comments.length === 0) {
+    throw new Error(`${username} commented on this yet`)
+  }
+  return Promise.resolve(comments)
+}

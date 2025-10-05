@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import PostCard from '../../components/posts/PostCard.vue'
 import { type Post } from '../../types/post'
-import { getPosts } from '@/api/service/post.service'
+import { getPosts, getPostsByUsername } from '@/api/service/post.service'
 import { ref, onMounted } from 'vue'
 import { isLoading } from '../../routes/index'
 interface Props {
   disableFollowBtn?: boolean
+  username?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -14,9 +15,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const posts = ref<Post[]>()
 const errorMessage = ref<string | null>()
+
 onMounted(async () => {
   try {
-    posts.value = await getPosts()
+    posts.value = props.username ? await getPostsByUsername(props.username) : await getPosts()
   } catch (err: any) {
     errorMessage.value = err.message ?? 'Failed to load posts'
   } finally {

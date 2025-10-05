@@ -54,3 +54,14 @@ export async function getFollowerByUsername(username: string): Promise<Follower>
   }
   return Promise.resolve(follower)
 }
+
+export async function getFollowing(username: string): Promise<Follower[]> {
+  const mockFollowers = await getFollowers()
+  const following = mockFollowers.filter((f) => f.username !== username)
+
+  if (following.length === 0) {
+    throw new Error(`${username} is not following anyone`)
+  }
+
+  return following
+}

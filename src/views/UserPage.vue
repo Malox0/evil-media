@@ -42,7 +42,11 @@ onMounted(async () => {
     <v-btn class="flex-grow-1" value="Following">Following</v-btn>
   </v-btn-toggle>
 
-  <ListPosts v-if="selected === 'Posts'" :disableFollowBtn="false" />
-  <ListComments v-if="selected === 'Comments'" :disable-follow-btn="false" />
-  <ListFollowers v-if="selected === 'Following'" />
+  <ListPosts v-if="selected === 'Posts'" :disableFollowBtn="false" :username="follower?.username" />
+  <ListComments
+    v-if="selected === 'Comments'"
+    :disable-follow-btn="false"
+    :username="follower?.username"
+  />
+  <ListFollowers v-if="selected === 'Following'" :username="follower?.username" />
 </template>

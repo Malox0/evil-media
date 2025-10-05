@@ -49,3 +49,14 @@ export async function getPostById(id: number): Promise<Post> {
 
   return Promise.resolve(post)
 }
+
+export async function getPostsByUsername(username: string): Promise<Post[]> {
+  const mockPosts = await getPosts()
+
+  const posts = mockPosts.filter((t) => t.by.username == username)
+
+  if (!posts) {
+    throw new Error(`Failed to load posts for ${username}`)
+  }
+  return Promise.resolve(posts)
+}
