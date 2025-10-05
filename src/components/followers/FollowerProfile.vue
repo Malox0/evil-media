@@ -24,12 +24,15 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <v-card>
+  <v-card class="rounded-lg">
     <div class="ma-8">
       <v-avatar size="120" class="ml-4">
-        <v-img src="https://randomuser.me/api/portraits/men/32.jpg" />
+        <v-img :src="`${follower.avatarUrl}`">
+          <template>
+            <v-icon>mdi-account-circle</v-icon>
+          </template>
+        </v-img>
       </v-avatar>
-
       <v-card-title class="font-weight-bold"
         >{{ follower.firstname }} {{ follower.lastname }}</v-card-title
       >

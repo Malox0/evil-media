@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import UserPage from '@/views/UserPage.vue'
+import FollowerPage from '@/views/FollowerPage.vue'
 import HomePage from '@/views/HomePage.vue'
 import { ref } from 'vue'
 
@@ -18,7 +18,7 @@ const routes = [
   {
     path: '/user/:username',
     name: 'user',
-    component: UserPage,
+    component: FollowerPage,
     props: true,
   },
 ]

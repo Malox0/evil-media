@@ -2,8 +2,7 @@
 import LikeButton from '../../components/actions/LikeButton.vue'
 import CommentButton from '../../components/actions/CommentButton.vue'
 import UserCard from '../../components/followers/FollowerCard.vue'
-import { ref } from 'vue'
-import { type Post } from '../../types/post'
+import type { Post } from '../../types/post'
 interface Props {
   post: Post
   disableFollowBtn?: boolean
@@ -12,7 +11,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
 })
-const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
 </script>
 <template>
   <v-hover v-slot="{ isHovering, props }">
@@ -20,7 +18,7 @@ const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
       v-bind="props"
       variant="outlined"
       color="surface-variant"
-      class="mt-6 mb-6 pa-2 rounded-xl transition-slow"
+      class="mt-6 mb-6 pa-4 rounded-xl transition-slow"
       :style="isHovering ? 'transform: scale(1.02);' : ''"
       :elevation="isHovering ? 12 : 2"
     >
@@ -33,16 +31,25 @@ const tags = ref<string[]>(['Gabel', 'Grueneis skkkrr', 'Paracetamol'])
       <v-card-title class="font-weight-bold">{{ post.title }}</v-card-title>
       <v-card-text>{{ post.subTitle }}</v-card-text>
 
-      <v-img
-        src="https://picsum.photos/800/400"
-        alt="Example Post Image"
-        class="ma-2 rounded"
-        height="300"
-        cover
-      />
+      <v-carousel
+        :continuous="false"
+        :show-arrows="false"
+        delimiter-icon="mdi-circle"
+        color="white"
+        height="400"
+        class="ma-2 rounded-lg"
+        hide-delimiter-background
+      >
+        <v-carousel-item v-if="post.imageUrls" v-for="(imgUrl, key) in post.imageUrls" :key="key">
+          <v-img :src="imgUrl" :alt="`image-${key}`" aspect-ratio="16/9" contain />
+        </v-carousel-item>
+      </v-carousel>
 
-      <v-chip v-for="tag in tags" :key="tag" size="small" class="ma-1"> #{{ tag }}</v-chip>
-
+      <div class="ml-2">
+        <v-chip v-if="post.tags" v-for="tag in post.tags" :key="tag" size="small" class="ma-1">
+          #{{ tag }}</v-chip
+        >
+      </div>
       <v-divider class="ma-2" />
       <template v-slot:actions>
         <LikeButton class="ml-2"></LikeButton>

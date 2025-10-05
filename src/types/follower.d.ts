@@ -6,6 +6,7 @@ export interface UserProfile {
   description: string
   createdAt: string
   ipAddress: string
+  avatarUrl?: string
 }
 
 export interface UserStats {
@@ -15,7 +16,6 @@ export interface UserStats {
 }
 
 export interface UserRelation {
-  // bezieht sich IMMER auf den eingeloggten User
   followed: boolean
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Follower } from '../../types/follower'
+import type { Follower } from '../../types/follower'
 import FollowerCard from '../followers/FollowerCard.vue'
 import { getFollowers } from '../../api/service/follower.service'
 import { onMounted, ref } from 'vue'

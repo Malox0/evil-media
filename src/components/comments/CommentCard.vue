@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Comment } from '../../types/comment'
+import type { Comment } from '../../types/comment'
 import LikeButton from '@/components/actions/LikeButton.vue'
 interface Props {
   comment: Comment

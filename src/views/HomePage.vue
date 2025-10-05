@@ -1,8 +1,37 @@
 <script setup lang="ts">
+import type { Post } from '@/types/post'
 import IntroSection from '../components/IntroSection.vue'
 import ListPosts from '../components/posts/ListPosts.vue'
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { getPosts } from '@/api/service/post.service'
+
 const selected = ref<string>('Latest')
+
+const posts = ref<Post[]>()
+const errorMessage = ref<string>()
+const postLoading = ref<boolean>(false)
+
+onMounted(async () => {
+  postLoading.value = true
+  try {
+    posts.value = await getPosts(selected.value)
+  } catch (err: any) {
+    errorMessage.value = err.message ?? 'Failed to load posts'
+  } finally {
+    postLoading.value = false
+  }
+})
+
+watch(selected, async (newSort) => {
+  postLoading.value = true
+  try {
+    posts.value = await getPosts(newSort)
+  } catch (err: any) {
+    errorMessage.value = err.message ?? 'Failed to load posts'
+  } finally {
+    postLoading.value = false
+  }
+})
 </script>
 <template>
   <IntroSection />
@@ -11,11 +40,13 @@ const selected = ref<string>('Latest')
 
     <div class="d-flex align-center">
       <v-btn-toggle v-model="selected" mandatory>
-        <v-btn value="Latest" text="Latest" class="ma-2 rounded-lg" />
-        <v-btn value="Popular" text="Popular" class="ma-2 rounded-lg" />
-        <v-btn value="Following" text="Following" class="ma-2 rounded-lg" />
+        <v-btn value="Latest" class="ma-2 rounded-lg">Latest</v-btn>
+        <v-btn value="Popular" class="ma-2 rounded-lg">Popular</v-btn>
+        <v-btn value="Following" class="ma-2 rounded-lg">Following</v-btn>
       </v-btn-toggle>
     </div>
   </div>
-  <ListPosts :disable-follow-btn="true" />
+  <v-skeleton-loader v-if="postLoading" type=" avatar, text, card" class="rounded-lg" />
+
+  <ListPosts v-else :disable-follow-btn="true" :posts="posts!" />
 </template>

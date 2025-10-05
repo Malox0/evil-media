@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { type Follower } from '../../types/follower'
+import type { Follower } from '../../types/follower'
 
 interface Props {
   follower: Follower
@@ -16,7 +16,11 @@ const props = withDefaults(defineProps<Props>(), {})
           class="text-decoration-none text-inherit cursor-pointer"
         >
           <v-avatar size="40" class="mr-3">
-            <v-img src="https://randomuser.me/api/portraits/men/32.jpg" />
+            <v-img :src="`${follower.avatarUrl}`">
+              <template>
+                <v-icon>mdi-account-circle</v-icon>
+              </template>
+            </v-img>
           </v-avatar>
         </router-link>
         <div class="d-flex flex-column justify-center">

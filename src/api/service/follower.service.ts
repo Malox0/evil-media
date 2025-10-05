@@ -14,6 +14,7 @@ export async function getFollowers(): Promise<Follower[]> {
       description: 'This is a test',
       followingCount: 11,
       postCount: 4,
+      avatarUrl: `https://ui-avatars.com/api/?name=Maximilian+Busch`,
     },
     {
       id: 2,
@@ -27,6 +28,7 @@ export async function getFollowers(): Promise<Follower[]> {
       description: 'This is a test',
       followingCount: 11,
       postCount: 4,
+      avatarUrl: `https://ui-avatars.com/api/?name=Johnny+Silverhand`,
     },
     {
       id: 3,
@@ -40,6 +42,7 @@ export async function getFollowers(): Promise<Follower[]> {
       description: 'This is a test',
       followingCount: 11,
       postCount: 4,
+      avatarUrl: `https://ui-avatars.com/api/?name=Lara+Croft`,
     },
   ]
 
