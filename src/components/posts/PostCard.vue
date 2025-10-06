@@ -3,29 +3,33 @@ import LikeButton from '../../components/actions/LikeButton.vue'
 import CommentButton from '../../components/actions/CommentButton.vue'
 import UserCard from '../../components/followers/FollowerCard.vue'
 import type { Post } from '../../types/post'
-import { useRoute, useRouter } from 'vue-router'
-import { nextTick, ref } from 'vue'
+
 interface Props {
   post: Post
   disableFollowBtn?: boolean
   extended?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props: Props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
 })
+
+const emit = defineEmits<{
+  (e: 'like', postId: number): void
+}>()
+
+function toggleLike() {
+  emit('like', props.post.id)
+}
 </script>
 <template>
-  <v-hover v-slot="{ isHovering, props }">
+  <v-hover v-slot="{ isHovering, props: hoverProps }">
     <v-card
-      v-bind="props"
+      v-bind="hoverProps"
       variant="outlined"
-      color="surface-variant"
       class="mt-6 mb-6 pa-4 rounded-xl transition-slow"
       :style="isHovering && !extended ? 'transform: scale(1.02);' : ''"
       :elevation="isHovering && !extended ? 12 : 2"
-      :hover="!extended"
-      :to="!extended ? `/posts/${post.id}` : undefined"
     >
       <UserCard
         v-if="disableFollowBtn"
@@ -33,10 +37,39 @@ const props = withDefaults(defineProps<Props>(), {
         :disable-follow-btn="disableFollowBtn"
       />
 
-      <v-card-title class="font-weight-bold">{{ post.title }}</v-card-title>
-      <v-card-text>{{ post.subTitle }}</v-card-text>
+      <v-hover v-slot="{ isHovering: isHoveringOverRoute, props: hoverTitleProps }">
+        <template v-if="!extended">
+          <router-link
+            v-bind="hoverTitleProps"
+            :to="`/posts/${post.id}`"
+            class="text-decoration-none"
+          >
+            <v-card-title
+              class="font-weight-bold transition-colors"
+              :class="isHoveringOverRoute ? 'text-primary' : 'text-high-emphasis'"
+            >
+              {{ post.title }}
+            </v-card-title>
+            <v-card-text
+              class="transition-colors"
+              :class="isHoveringOverRoute ? 'text-primary' : 'text-medium-emphasis'"
+            >
+              {{ post.subTitle }}
+            </v-card-text>
+          </router-link>
+        </template>
+        <template v-else>
+          <v-card-title class="font-weight-bold text-high-emphasis">
+            {{ post.title }}
+          </v-card-title>
+          <v-card-text class="text-medium-emphasis">
+            {{ post.subTitle }}
+          </v-card-text>
+        </template>
+      </v-hover>
 
       <v-carousel
+        v-if="post.imageUrls"
         :continuous="false"
         :show-arrows="false"
         delimiter-icon="mdi-circle"
@@ -45,26 +78,28 @@ const props = withDefaults(defineProps<Props>(), {
         class="ma-2 rounded-lg"
         hide-delimiter-background
       >
-        <v-carousel-item v-if="post.imageUrls" v-for="(imgUrl, key) in post.imageUrls" :key="key">
+        <v-carousel-item v-for="(imgUrl, key) in post.imageUrls" :key="key">
           <v-img :src="imgUrl" :alt="`image-${key}`" aspect-ratio="16/9" contain />
         </v-carousel-item>
       </v-carousel>
 
       <div class="ml-2">
-        <v-chip v-if="post.tags" v-for="tag in post.tags" :key="tag" size="small" class="ma-1">
-          #{{ tag }}</v-chip
-        >
+        <v-chip v-for="tag in post.tags || []" :key="tag" size="small" class="ma-1">
+          #{{ tag }}
+        </v-chip>
       </div>
+
       <v-divider class="ma-2" />
-      <template v-slot:actions>
-        <LikeButton class="ml-2"></LikeButton>
+
+      <v-card-actions>
+        <LikeButton class="ml-2" @toggle-like="toggleLike" :liked="props.post.likedByClient" />
         <span class="ml-n2">{{ post.likes }}</span>
-        <CommentButton :disabled="extended" :to="`/posts/${post.id}#comments`"></CommentButton>
+        <CommentButton :disabled="extended" :to="`/posts/${post.id}#comments`" />
         <span class="ml-n2">{{ post.commentsCount }}</span>
         <v-btn icon variant="text">
-          <v-icon> mdi-share-variant</v-icon>
+          <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-      </template>
+      </v-card-actions>
     </v-card>
   </v-hover>
 </template>

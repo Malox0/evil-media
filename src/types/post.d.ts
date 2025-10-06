@@ -10,4 +10,5 @@ export interface Post {
   commentsCount: number
   tags?: string[]
   imageUrls?: string[]
+  likedByClient?: boolean
 }

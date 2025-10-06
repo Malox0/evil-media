@@ -41,6 +41,10 @@ async function initComments(): Promise<Comment[]> {
   return Promise.resolve(mockComments)
 }
 export async function getComments(): Promise<Comment[]> {
+  const comments: Comment[] = await initComments()
+  if (!comments) {
+    return []
+  }
   return initComments()
 }
 
@@ -95,4 +99,28 @@ export async function createComment(text: string, postId: number) {
   comments.push(newComment)
 
   return newComment
+}
+
+export async function updateLikeOnComment(commentId: number, postId: number) {
+  const comments: Comment[] = await getCommentsByPost(postId)
+
+  const index = comments.findIndex((t) => t.id === commentId)
+
+  if (index !== -1) {
+    const comment: Comment = comments[index]!
+
+    const updated: Comment = {
+      ...comment,
+      likes: !comment.likedByClient ? comment.likes + 1 : comment.likes - 1,
+      likedByClient: !comment.likedByClient,
+    }
+
+    const mockIndex = mockComments!.findIndex(
+      (t) => t.id == updated.id && t.post.id === updated.post.id,
+    )
+    mockComments![mockIndex] = updated
+    return Promise.resolve(updated)
+  }
+
+  throw Error(`Comment of id ${commentId} im post of id ${postId}`)
 }

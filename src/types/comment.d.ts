@@ -7,6 +7,7 @@ export interface Comment {
   uploadDate: string
   post: Post
   by: Follower
+  likedByClient?: boolean
 }
 
 export interface CreateCommentRequest {

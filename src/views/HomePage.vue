@@ -3,11 +3,11 @@ import type { Post } from '@/types/post'
 import IntroSection from '../components/IntroSection.vue'
 import ListPosts from '../components/posts/ListPosts.vue'
 import { ref, watch, onMounted } from 'vue'
-import { getPosts } from '@/api/service/post.service'
+import { getPosts, updateLikeOnPost } from '@/api/service/post.service'
 
 const selected = ref<string>('Latest')
 
-const posts = ref<Post[]>()
+const posts = ref<Post[]>([])
 const errorMessage = ref<string>()
 const postLoading = ref<boolean>(false)
 
@@ -32,6 +32,14 @@ watch(selected, async (newSort) => {
     postLoading.value = false
   }
 })
+
+async function reloadPost(postId: number) {
+  const updated = await updateLikeOnPost(postId)
+  const index = posts.value.findIndex((p) => p.id === postId)
+  if (index !== -1) {
+    posts.value[index] = { ...updated } // force reactivity
+  }
+}
 </script>
 <template>
   <IntroSection />
@@ -48,5 +56,5 @@ watch(selected, async (newSort) => {
   </div>
   <v-skeleton-loader v-if="postLoading" type=" avatar, text, card" class="rounded-lg" />
 
-  <ListPosts v-else :disable-follow-btn="true" :posts="posts!" />
+  <ListPosts v-else :disable-follow-btn="true" :posts="posts!" @like="reloadPost" />
 </template>

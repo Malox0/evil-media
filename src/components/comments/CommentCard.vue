@@ -5,11 +5,21 @@ interface Props {
   comment: Comment
   disableFollowBtn: boolean
   variant?: 'flat' | 'outlined' | 'plain' | 'tonal' | undefined
+  liked: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
   variant: 'plain',
+  liked: false,
 })
+
+const emit = defineEmits<{
+  (e: 'liked', commentId: number): void
+}>()
+
+function toggleLike() {
+  emit('liked', props.comment.id)
+}
 </script>
 <template>
   <v-card :variant="variant" class="pa-2 mt-4 mb-4 rounded-lg">
@@ -34,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
       <v-card-text v-card-text
         >{{ comment.likes }} <span class="opacity-70">likes</span>
       </v-card-text>
-      <LikeButton />
+      <LikeButton @toggle-like="toggleLike" :liked="liked" />
     </div>
   </v-card>
 </template>

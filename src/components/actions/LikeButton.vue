@@ -1,13 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+const props = withDefaults(
+  defineProps<{
+    liked: boolean
+  }>(),
+  {
+    liked: false,
+  },
+)
 
-const liked = ref(false)
-const count = ref(0)
+const emit = defineEmits<{
+  (e: 'toggle-like'): void
+}>()
+
+function onClick() {
+  emit('toggle-like')
+}
 </script>
 
 <template>
   <div class="d-flex align-center">
-    <v-btn @click="liked = !liked" icon variant="text">
+    <v-btn @click="onClick" icon variant="text">
       <v-icon>{{ liked ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
     </v-btn>
   </div>

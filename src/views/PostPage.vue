@@ -1,6 +1,13 @@
 <template>
   <v-btn to="/home" prepend-icon="mdi-arrow-left-thin" class="mb-4"> go back </v-btn>
-  <PostCard v-if="post" :post="post" :extended="true" :disable-follow-btn="true" />
+  <PostCard
+    v-if="post"
+    :key="post.id"
+    @like="reloadPost"
+    :post="post"
+    :extended="true"
+    :disable-follow-btn="true"
+  />
   <section id="comments">
     <v-card class="rounded-xl pa-4" variant="outlined">
       <v-card-title> Comments ({{ post?.commentsCount }}) </v-card-title>
@@ -13,7 +20,7 @@
   </section>
 </template>
 <script setup lang="ts">
-import { getPostById } from '@/api/service/post.service'
+import { getPostById, updateLikeOnPost } from '@/api/service/post.service'
 import type { Post } from '@/types/post'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -64,4 +71,9 @@ onMounted(async () => {
 })
 
 watch(() => route.hash, scrollToHash)
+
+async function reloadPost(postId: number) {
+  const updated: Post = await updateLikeOnPost(postId)
+  post.value = { ...updated }
+}
 </script>

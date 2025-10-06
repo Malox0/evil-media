@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import CommentCard from '../../components/comments/CommentCard.vue'
 import type { Comment } from '../../types/comment'
-import { getCommentsByPost, getCommentsByUsername } from '../../api/service/comment.service'
+import {
+  getCommentsByPost,
+  getCommentsByUsername,
+  updateLikeOnComment,
+} from '../../api/service/comment.service'
 import { isLoading } from '../../routes'
 import { onMounted, ref } from 'vue'
 
@@ -15,7 +19,16 @@ const props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
 })
 
-const comments = ref<Comment[]>()
+async function reloadComment(commentId: number) {
+  const index = comments.value.findIndex((p) => p.id === commentId)
+
+  if (index !== -1) {
+    const updated: Comment = await updateLikeOnComment(commentId, comments.value[index]?.post.id)
+    comments.value[index] = { ...updated }
+  }
+}
+
+const comments = ref<Comment[]>([])
 const errorMessage = ref<string | null>()
 onMounted(async () => {
   try {
@@ -34,5 +47,7 @@ onMounted(async () => {
     :comment="comment"
     :disable-follow-btn="disableFollowBtn"
     :variant="variant"
+    @liked="reloadComment"
+    :liked="comment.likedByClient"
   />
 </template>

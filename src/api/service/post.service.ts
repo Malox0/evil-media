@@ -1,45 +1,66 @@
 import type { Post } from '@/types/post'
 import { getFollowerByUsername } from './follower.service'
-export async function getPosts(sortBy?: string): Promise<Post[]> {
-  const maxi = await getFollowerByUsername('maxi')
-  const lara = await getFollowerByUsername('lara')
-  const johnny = await getFollowerByUsername('johnny')
+import { ref } from 'vue'
 
-  const posts: Post[] = [
-    {
-      id: 1,
-      title: 'Badass Gaming',
-      subTitle: 'I shit myself when starting this application',
-      by: maxi,
-      createdAt: new Date('2025-10-01T10:15:00Z'),
-      likes: 2,
-      commentsCount: 2,
-      tags: ['#gaming', '#ragequit', '#funny'],
-      imageUrls: ['https://picsum.photos/id/1011/600/400', 'https://picsum.photos/id/1012/600/400'],
-    },
-    {
-      id: 2,
-      title: 'Johnny',
-      subTitle: 'Johnny showed me how to add css here, what a nice guy.',
-      by: lara,
-      likes: 4,
-      commentsCount: 2,
-      createdAt: new Date('2025-10-01T10:15:00Z'),
-      tags: ['#frontend', '#css', '#tutorial'],
-      imageUrls: ['https://picsum.photos/id/1025/600/400'],
-    },
-    {
-      id: 3,
-      title: 'Flying',
-      subTitle: 'sucks',
-      by: johnny,
-      likes: 8,
-      commentsCount: 2,
-      createdAt: new Date('2025-10-04T08:45:00Z'),
-      tags: ['#travel', '#flying', '#delays'],
-      imageUrls: ['https://picsum.photos/id/1040/600/400', 'https://picsum.photos/id/1041/600/400'],
-    },
-  ]
+let mockPosts: Post[] | null = null
+
+async function initPost() {
+  if (!mockPosts) {
+    const maxi = await getFollowerByUsername('maxi')
+    const lara = await getFollowerByUsername('lara')
+    const johnny = await getFollowerByUsername('johnny')
+
+    mockPosts = [
+      {
+        id: 1,
+        title: 'Badass Gaming',
+        subTitle: 'I shit myself when starting this application',
+        by: maxi,
+        createdAt: new Date('2025-10-01T10:15:00Z'),
+        likes: 2,
+        commentsCount: 2,
+        tags: ['#gaming', '#ragequit', '#funny'],
+        imageUrls: [
+          'https://picsum.photos/id/1011/600/400',
+          'https://picsum.photos/id/1012/600/400',
+        ],
+      },
+      {
+        id: 2,
+        title: 'Johnny',
+        subTitle: 'Johnny showed me how to add css here, what a nice guy.',
+        by: lara,
+        likes: 4,
+        commentsCount: 2,
+        createdAt: new Date('2025-10-01T10:15:00Z'),
+        tags: ['#frontend', '#css', '#tutorial'],
+        imageUrls: ['https://picsum.photos/id/1025/600/400'],
+      },
+      {
+        id: 3,
+        title: 'Flying',
+        subTitle: 'sucks',
+        by: johnny,
+        likes: 8,
+        commentsCount: 2,
+        createdAt: new Date('2025-10-04T08:45:00Z'),
+        tags: ['#travel', '#flying', '#delays'],
+        imageUrls: [
+          'https://picsum.photos/id/1040/600/400',
+          'https://picsum.photos/id/1041/600/400',
+        ],
+      },
+    ]
+  }
+
+  return Promise.resolve(mockPosts)
+}
+export async function getPosts(sortBy?: string): Promise<Post[]> {
+  const posts = await initPost()
+
+  if (!posts) {
+    return []
+  }
 
   if (posts.length === 0) {
     throw new Error('No posts found')
@@ -77,4 +98,20 @@ export async function getPostsByUsername(username: string): Promise<Post[]> {
     throw new Error(`Failed to load posts for ${username}`)
   }
   return Promise.resolve(posts)
+}
+
+export async function updateLikeOnPost(id: number) {
+  const post: Post = await getPostById(id)
+  const index = mockPosts!.findIndex((p) => p.id === id)
+  if (index !== -1) {
+    const updated: Post = {
+      ...post,
+      likes: post.likedByClient ? post.likes - 1 : post.likes + 1,
+      likedByClient: !post.likedByClient,
+    }
+
+    mockPosts![index] = updated
+    return updated
+  }
+  throw new Error(`Post with id ${id} not found`)
 }
