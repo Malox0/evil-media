@@ -26,15 +26,33 @@ function toggleLike() {
     <div class="d-flex flex-row">
       <v-card-text v-if="!disableFollowBtn">
         <span class="opacity-70">Commented on </span>
-        <span class="text-primary fond-weight-bold">
-          {{ comment.post.title }}
-        </span>
+
+        <v-hover v-slot="{ isHovering, props }">
+          <router-link
+            v-bind="props"
+            :to="`/posts/${comment.post.id}`"
+            :class="`${isHovering ? 'text-decoration-underline' : 'text-decoration-none'} text-inherit cursor-pointer`"
+          >
+            <span class="text-primary fond-weight-bold">
+              {{ comment.post.title }}
+            </span>
+          </router-link>
+        </v-hover>
       </v-card-text>
+
       <v-card-text v-else>
         <span class="opacity-70">Commented by </span>
-        <span class="text-primary fond-weight-bold">
-          {{ comment.by.username }}
-        </span>
+        <v-hover v-slot="{ isHovering, props }">
+          <router-link
+            v-bind="props"
+            :to="`/user/${comment.by.username}`"
+            :class="`${isHovering ? 'text-decoration-underline' : 'text-decoration-none'} text-inherit cursor-pointer`"
+          >
+            <span class="text-primary font-weight-bold">
+              {{ comment.by.username }}
+            </span>
+          </router-link>
+        </v-hover>
       </v-card-text>
       <v-card-text class="opacity-70 d-flex justify-end"> {{ comment.uploadDate }}</v-card-text>
     </div>
