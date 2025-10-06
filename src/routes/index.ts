@@ -1,10 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRoute } from 'vue-router'
 import FollowerPage from '@/views/FollowerPage.vue'
 import HomePage from '@/views/HomePage.vue'
-import { ref } from 'vue'
+import PostPage from '@/views/PostPage.vue'
+
+import { nextTick, ref } from 'vue'
 
 export const isLoading = ref(false)
-
+const route = useRoute()
 const routes = [
   {
     path: '/',
@@ -21,11 +23,26 @@ const routes = [
     component: FollowerPage,
     props: true,
   },
+  {
+    path: '/posts/:id',
+    name: 'post',
+    component: PostPage,
+    props: true,
+  },
 ]
 
 export const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else if (to.hash) {
+      return { top: 0 }
+    } else {
+      return { top: 0 }
+    }
+  },
 })
 
 router.beforeEach((to, from, next) => {
@@ -33,7 +50,7 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-router.afterEach(() => {
+router.afterEach(async (to) => {
   isLoading.value = false
 })
 

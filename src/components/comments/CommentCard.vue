@@ -4,13 +4,15 @@ import LikeButton from '@/components/actions/LikeButton.vue'
 interface Props {
   comment: Comment
   disableFollowBtn: boolean
+  variant?: 'flat' | 'outlined' | 'plain' | 'tonal' | undefined
 }
 const props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
+  variant: 'plain',
 })
 </script>
 <template>
-  <v-card class="pa-2 mt-4 mb-4 rounded-lg">
+  <v-card :variant="variant" class="pa-2 mt-4 mb-4 rounded-lg">
     <div class="d-flex flex-row">
       <v-card-text v-if="!disableFollowBtn">
         <span class="opacity-70">Commented on </span>

@@ -3,9 +3,12 @@ import LikeButton from '../../components/actions/LikeButton.vue'
 import CommentButton from '../../components/actions/CommentButton.vue'
 import UserCard from '../../components/followers/FollowerCard.vue'
 import type { Post } from '../../types/post'
+import { useRoute, useRouter } from 'vue-router'
+import { nextTick } from 'vue'
 interface Props {
   post: Post
   disableFollowBtn?: boolean
+  extended?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,8 +22,10 @@ const props = withDefaults(defineProps<Props>(), {
       variant="outlined"
       color="surface-variant"
       class="mt-6 mb-6 pa-4 rounded-xl transition-slow"
-      :style="isHovering ? 'transform: scale(1.02);' : ''"
-      :elevation="isHovering ? 12 : 2"
+      :style="isHovering && !extended ? 'transform: scale(1.02);' : ''"
+      :elevation="isHovering && !extended ? 12 : 2"
+      :hover="!extended"
+      :to="!extended ? `/posts/${post.id}` : undefined"
     >
       <UserCard
         v-if="disableFollowBtn"
@@ -54,7 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
       <template v-slot:actions>
         <LikeButton class="ml-2"></LikeButton>
         <span class="ml-n2">{{ post.likes }}</span>
-        <CommentButton></CommentButton>
+        <CommentButton :disabled="extended" :to="`/posts/${post.id}#comments`"></CommentButton>
         <span class="ml-n2">{{ post.commentsCount }}</span>
         <v-btn icon variant="text">
           <v-icon> mdi-share-variant</v-icon>
