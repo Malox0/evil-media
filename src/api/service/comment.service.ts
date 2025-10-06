@@ -1,43 +1,47 @@
 import { getFollowerByUsername } from './follower.service'
 import { getPostById } from './post.service'
-import type { Comment } from '../../types/comment'
+import type { Comment, CreateCommentRequest } from '../../types/comment'
+import type { Post } from '@/types/post'
 
-export async function getComments(): Promise<Comment[]> {
-  const maxi = await getFollowerByUsername('maxi')
-  const lara = await getFollowerByUsername('lara')
-  const johnny = await getFollowerByUsername('johnny')
+let mockComments: Comment[] | null = null
 
-  const mockComments: Comment[] = [
-    {
-      id: 1,
-      text: 'This is hilarious, my vscode is fucked up',
-      user: 'maximilian',
-      likes: 2,
-      uploadDate: '5H ago',
-      post: await getPostById(1),
-      by: maxi,
-    },
-    {
-      id: 2,
-      text: 'Oh i cannot go to the gym crybaby',
-      user: 'alex',
-      likes: 13,
-      uploadDate: 'a few seconds ago',
-      post: await getPostById(1),
-      by: lara,
-    },
-    {
-      id: 3,
-      text: 'fuck',
-      user: 'fuckinghell',
-      likes: 222,
-      uploadDate: '2H ago',
-      post: await getPostById(1),
-      by: johnny,
-    },
-  ]
+async function initComments(): Promise<Comment[]> {
+  if (!mockComments) {
+    const maxi = await getFollowerByUsername('maxi')
+    const lara = await getFollowerByUsername('lara')
+    const johnny = await getFollowerByUsername('johnny')
 
+    mockComments = [
+      {
+        id: 1,
+        text: 'This is hilarious, my vscode is fucked up',
+        likes: 2,
+        uploadDate: '5H ago',
+        post: await getPostById(1),
+        by: maxi,
+      },
+      {
+        id: 2,
+        text: 'Oh i cannot go to the gym crybaby',
+        likes: 13,
+        uploadDate: 'a few seconds ago',
+        post: await getPostById(1),
+        by: lara,
+      },
+      {
+        id: 3,
+        text: 'fuck',
+        likes: 222,
+        uploadDate: '2H ago',
+        post: await getPostById(1),
+        by: johnny,
+      },
+    ]
+  }
   return Promise.resolve(mockComments)
+}
+export async function getComments(): Promise<Comment[]> {
+  return initComments()
 }
 
 export async function getCommentById(id: number): Promise<Comment> {
@@ -67,4 +71,28 @@ export async function getCommentsByUsername(username: string) {
     throw new Error(`${username} commented on this yet`)
   }
   return Promise.resolve(comments)
+}
+
+export async function createComment(text: string, postId: number) {
+  const comments = await getComments()
+  const user = await getFollowerByUsername('maxi')
+  const post = await getPostById(postId)
+
+  const body: CreateCommentRequest = {
+    text: text,
+    userId: 'username',
+    postId: postId,
+  }
+
+  const newComment: Comment = {
+    id: comments.length + 1,
+    text: body.text,
+    likes: 0,
+    uploadDate: 'just now',
+    post: post,
+    by: user,
+  }
+  comments.push(newComment)
+
+  return newComment
 }

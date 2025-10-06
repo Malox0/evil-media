@@ -4,7 +4,7 @@ import CommentButton from '../../components/actions/CommentButton.vue'
 import UserCard from '../../components/followers/FollowerCard.vue'
 import type { Post } from '../../types/post'
 import { useRoute, useRouter } from 'vue-router'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 interface Props {
   post: Post
   disableFollowBtn?: boolean

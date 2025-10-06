@@ -3,8 +3,12 @@
   <PostCard v-if="post" :post="post" :extended="true" :disable-follow-btn="true" />
   <section id="comments">
     <v-card class="rounded-xl pa-4" variant="outlined">
-      <v-card-title> Comments </v-card-title>
-      <ListComments :post-id="id" :disable-follow-btn="true" variant="tonal" />
+      <v-card-title> Comments ({{ post?.commentsCount }}) </v-card-title>
+      <v-card-item class="rounded-lg pa-4">
+        <v-textarea v-model="commentText" rows="3" label="Write a comment..."></v-textarea>
+        <v-btn color="primary" rounded @click="PostComment">Post Comment</v-btn>
+      </v-card-item>
+      <ListComments :key="reload" :post-id="id" :disable-follow-btn="true" variant="tonal" />
     </v-card>
   </section>
 </template>
@@ -15,6 +19,7 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import PostCard from '../components/posts/PostCard.vue'
 import ListComments from '@/components/comments/ListComments.vue'
+import { createComment } from '@/api/service/comment.service'
 
 const route = useRoute()
 const id = Number(route.params.id)
@@ -30,6 +35,17 @@ async function scrollToHash() {
       const y = el.getBoundingClientRect().top + window.scrollY - 80
       window.scrollTo({ top: y, behavior: 'smooth' })
     }
+  }
+}
+const commentText = ref<string>('')
+const reload = ref(0)
+async function PostComment() {
+  if (commentText.value.trim().length > 0) {
+    await createComment(commentText.value, post.value!.id)
+    commentText.value = ''
+    reload.value++
+  } else {
+    //Red alert on button
   }
 }
 
