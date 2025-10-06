@@ -48,6 +48,6 @@ onMounted(async () => {
     :disable-follow-btn="disableFollowBtn"
     :variant="variant"
     @liked="reloadComment"
-    :liked="comment.likedByClient"
+    :liked="comment.likedByClient || false"
   />
 </template>

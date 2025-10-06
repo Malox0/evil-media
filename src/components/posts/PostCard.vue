@@ -92,7 +92,11 @@ function toggleLike() {
       <v-divider class="ma-2" />
 
       <v-card-actions>
-        <LikeButton class="ml-2" @toggle-like="toggleLike" :liked="props.post.likedByClient" />
+        <LikeButton
+          class="ml-2"
+          @toggle-like="toggleLike"
+          :liked="props.post.likedByClient || false"
+        />
         <span class="ml-n2">{{ post.likes }}</span>
         <CommentButton :disabled="extended" :to="`/posts/${post.id}#comments`" />
         <span class="ml-n2">{{ post.commentsCount }}</span>
