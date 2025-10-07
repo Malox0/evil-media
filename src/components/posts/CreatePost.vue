@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import type { Post } from '@/types/post'
+import type { CreatePostRequest, Post } from '@/types/post'
 import type { Follower } from '@/types/follower'
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
+import { createPost } from '@/api/service/post.service'
+import { useRouter } from 'vue-router'
 
-const props = withDefaults(
-  defineProps<{
-    size: 'large' | 'small'
-  }>(),
-  {
-    size: 'small',
-  },
-)
 const clientFollower: Follower = {
   id: 1,
   username: 'maxi',
@@ -25,17 +19,14 @@ const clientFollower: Follower = {
   postCount: 4,
   avatarUrl: `https://ui-avatars.com/api/?name=Maximilian+Busch`,
 }
-const post = ref<Post>({
-  id: 1,
+const post = ref<CreatePostRequest>({
   title: '',
   subTitle: '',
   by: clientFollower,
-  createdAt: new Date('2025-10-01T10:15:00Z'),
-  likes: 0,
-  commentsCount: 0,
   tags: [],
-  imageUrls: [],
+  imageFiles: [],
 })
+
 const tags = ref<string>('')
 
 const images = ref<File[]>([])
@@ -54,12 +45,16 @@ function fileRules(files: File[] | File | null) {
 
 watch(tags, () => {
   if (tags.value?.trim().length > 0) {
-    post.value.tags = tags.value
+    const extractedTags = tags.value
       .split(',')
       .map((t) => t.trim())
       .filter((t) => t.length > 0)
 
+    post.value.tags = extractedTags.filter((tag, index) => extractedTags.indexOf(tag) === index)
+
     post.value.tags.forEach((t) => console.log(t))
+  } else {
+    post.value.tags = []
   }
 })
 
@@ -71,23 +66,32 @@ function resetForm() {
   formRef.value?.resetValidation()
 }
 
-watch(
-  post,
-  () => {
-    console.log(post.value.title)
-  },
-  {
-    deep: true,
-  },
-)
-
 const formRef = ref()
 const formValid = ref(false)
 
-function submit(isActive: any) {
-  formRef.value?.validate().then((res: boolean) => {
+const router = useRouter()
+
+async function submit(isActive: any) {
+  formRef.value?.validate().then(async (res: boolean) => {
     if (res) {
-      console.log('Post submitted:', post.value, images.value)
+      post.value.imageFiles = images.value
+      console.log(
+        'Post submitted:',
+        post.value.title,
+        post.value.subTitle,
+        post.value.tags,
+        post.value.imageFiles,
+      )
+      const newPost = await createPost(post.value)
+
+      router.push({
+        name: 'home',
+        hash: `#post-${newPost.id}`,
+        query: {
+          scroll: 'true',
+        },
+      })
+
       isActive.value = false
     }
   })
@@ -100,7 +104,6 @@ function submit(isActive: any) {
         v-bind="activatorProps"
         variant="flat"
         color="primary"
-        :size="size"
         prepend-icon="mdi-square-edit-outline"
         rounded
       >

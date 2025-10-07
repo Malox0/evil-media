@@ -1,4 +1,4 @@
-import type { Post } from '@/types/post'
+import type { CreatePostRequest, Post } from '@/types/post'
 import { getFollowerByUsername } from './follower.service'
 import { ref } from 'vue'
 
@@ -114,4 +114,18 @@ export async function updateLikeOnPost(id: number) {
     return updated
   }
   throw new Error(`Post with id ${id} not found`)
+}
+
+export async function createPost(request: CreatePostRequest) {
+  //Create Post
+  const post: Post = {
+    ...request,
+    id: mockPosts!.length + 1,
+    createdAt: new Date(),
+    likes: 0,
+    commentsCount: 0,
+  }
+  mockPosts?.push(post)
+
+  return post
 }

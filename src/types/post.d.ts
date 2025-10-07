@@ -12,3 +12,11 @@ export interface Post {
   imageUrls?: string[]
   likedByClient?: boolean
 }
+
+export interface CreatePostRequest {
+  title: string
+  subTitle: string
+  by: Follower
+  tags?: string[]
+  imageFiles: Files[]
+}
