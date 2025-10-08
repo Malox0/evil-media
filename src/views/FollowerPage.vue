@@ -11,7 +11,6 @@ import { getFollowerByUsername } from '@/api/service/follower.service'
 import { isLoading } from '@/routes'
 import { getPosts, getPostsByUsername } from '@/api/service/post.service'
 import type { Post } from '@/types/post'
-import UserCard from '@/components/user/UserCard.vue'
 
 const route = useRoute()
 const username = route.params.username as string
