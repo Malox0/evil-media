@@ -3,10 +3,10 @@ import FollowerPage from '@/views/FollowerPage.vue'
 import HomePage from '@/views/HomePage.vue'
 import PostPage from '@/views/PostPage.vue'
 
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
+import { useAuth } from '@/auth/useAuth'
 
 export const isLoading = ref(false)
-const route = useRoute()
 const routes = [
   {
     path: '/',
@@ -45,9 +45,22 @@ export const router = createRouter({
   },
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to) => {
   isLoading.value = true
-  next()
+
+  const { keycloak, roles } = useAuth()
+  if (to.meta?.requiresAuth && !keycloak.authenticated) {
+    await keycloak.login({ redirectUri: window.location.origin + to.fullPath })
+    return false
+  }
+  if (to.meta?.roles) {
+    const need = to.meta.roles as string[]
+    if (!need.every((r) => roles.value.includes(r))) {
+      return { path: '/' }
+    }
+
+    return true
+  }
 })
 
 router.afterEach(async (to) => {

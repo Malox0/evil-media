@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CreatePost from '../posts/CreatePost.vue'
+import Profile from '../auth/Profile.vue'
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import CreatePost from '../posts/CreatePost.vue'
       <v-btn icon="mdi-bell"></v-btn>
       <CreatePost />
 
-      <v-btn icon="mdi-account"></v-btn>
+      <Profile></Profile>
     </template>
   </v-app-bar>
 </template>

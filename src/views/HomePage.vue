@@ -5,7 +5,6 @@ import ListPosts from '../components/posts/ListPosts.vue'
 import { ref, watch, onMounted, nextTick } from 'vue'
 import { getPosts, updateLikeOnPost } from '@/api/service/post.service'
 import { useRoute, useRouter } from 'vue-router'
-import { watchDebounced } from '@vueuse/core'
 
 const selected = ref<string>('Latest')
 
