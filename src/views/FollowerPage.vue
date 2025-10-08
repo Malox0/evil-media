@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import FollowerProfile from '../components/followers/FollowerProfile.vue'
 import ListPosts from '../components/posts/ListPosts.vue'
@@ -61,6 +61,13 @@ onMounted(async () => {
     toggleLoading.value = false
   }
 })
+
+watch(
+  () => route.params.username,
+  async (newName) => {
+    if (newName) follower.value = await getFollowerByUsername(newName as string)
+  },
+)
 </script>
 <template>
   <v-btn to="/home" prepend-icon="mdi-arrow-left-thin" class="mb-4"> go back </v-btn>
@@ -107,16 +114,22 @@ onMounted(async () => {
   />
 
   <ListPosts
+    :key="follower?.username"
     v-if="!toggleLoading && selected === 'Posts'"
     :disableFollowBtn="false"
     :username="follower?.username"
     :posts="posts!"
   />
   <ListComments
+    :key="follower?.username"
     v-if="!toggleLoading && selected === 'Comments'"
     :disable-follow-btn="false"
     :username="follower?.username"
     :variant="'flat'"
   />
-  <ListFollowers v-if="!toggleLoading && selected === 'Following'" :username="follower?.username" />
+  <ListFollowers
+    :key="follower?.username"
+    v-if="!toggleLoading && selected === 'Following'"
+    :username="follower?.username"
+  />
 </template>

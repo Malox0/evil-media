@@ -2,7 +2,7 @@
 import type { Follower } from '../../types/follower'
 import FollowerCard from '../followers/FollowerCard.vue'
 import { getFollowers } from '../../api/service/follower.service'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { isLoading } from '../../routes/index'
 import { getFollowing } from '../../api/service/follower.service'
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EditFollowerRequest, Follower } from '../../types/follower'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useAuth } from '../../auth/useAuth'
 import { editFollower } from '../../api/service/follower.service'
 const publicIp = ref<string>('')
@@ -15,17 +15,15 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const editRequest = ref<EditFollowerRequest>({ ...props.follower })
-const isMe = ref<boolean>(false)
+const isMe = computed(() => {
+  return clientFollower.value?.username === props.follower.username
+})
+
 const { follower: clientFollower } = useAuth()
 
 const editProfile = ref<boolean>(false)
 
 onMounted(async () => {
-  if (clientFollower.value && clientFollower.value.username === props.follower.username) {
-    isMe.value = true
-  } else {
-    isMe.value = false
-  }
   try {
     const res = await fetch('https://api.ipify.org?format=json')
     const data = await res.json()
@@ -134,7 +132,7 @@ async function saveChanges() {
       >
 
       <v-btn
-        v-if="!editProfile"
+        v-if="isMe && !editProfile"
         block
         class="mr-2"
         color="primary"
