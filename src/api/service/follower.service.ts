@@ -1,4 +1,4 @@
-import { useAuth } from '@/auth/useAuth'
+import { useAuth } from '../../auth/useAuth'
 import type { CreateUserProfileRequest, EditFollowerRequest, Follower } from '../../types/follower'
 
 let mockFollowers: Follower[] | null = null

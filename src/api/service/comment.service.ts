@@ -1,8 +1,7 @@
 import { getFollowerByUsername } from './follower.service'
 import { getPostById } from './post.service'
 import type { Comment, CreateCommentRequest } from '../../types/comment'
-import type { Post } from '@/types/post'
-import { useAuth } from '@/auth/useAuth'
+import { useAuth } from '../../auth/useAuth'
 
 let mockComments: Comment[] | null = null
 

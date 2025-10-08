@@ -23,7 +23,7 @@ async function reloadComment(commentId: number) {
   const index = comments.value.findIndex((p) => p.id === commentId)
 
   if (index !== -1) {
-    const updated: Comment = await updateLikeOnComment(commentId, comments.value[index]?.post.id)
+    const updated: Comment = await updateLikeOnComment(commentId, comments.value[index]!.post.id)
     comments.value[index] = { ...updated }
   }
 }

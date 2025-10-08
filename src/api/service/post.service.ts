@@ -1,6 +1,6 @@
-import type { CreatePostRequest, Post } from '@/types/post'
+import type { CreatePostRequest, Post } from '../../types/post'
 import { getFollowerByUsername } from './follower.service'
-import { useAuth } from '@/auth/useAuth'
+import { useAuth } from '../../auth/useAuth'
 
 let mockPosts: Post[] | null = null
 

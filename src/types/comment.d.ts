@@ -1,4 +1,5 @@
 import type { Follower } from './follower'
+import { Post } from './post'
 
 export interface Comment {
   id: number
