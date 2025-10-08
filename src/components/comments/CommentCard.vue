@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Comment } from '../../types/comment'
 import LikeButton from '@/components/actions/LikeButton.vue'
+import { createApp } from 'vue'
 interface Props {
   comment: Comment
   disableFollowBtn: boolean
@@ -54,7 +55,7 @@ function toggleLike() {
           </router-link>
         </v-hover>
       </v-card-text>
-      <v-card-text class="opacity-70 d-flex justify-end"> {{ comment.uploadDate }}</v-card-text>
+      <v-card-text class="opacity-70 d-flex justify-end"> {{ comment.createdAt }}</v-card-text>
     </div>
     <v-card-text class="text-subtitle-1">{{ comment.text }}</v-card-text>
 
