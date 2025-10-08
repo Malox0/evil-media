@@ -1,6 +1,6 @@
 import type { CreatePostRequest, Post } from '@/types/post'
 import { getFollowerByUsername } from './follower.service'
-import { ref } from 'vue'
+import { useAuth } from '@/auth/useAuth'
 
 let mockPosts: Post[] | null = null
 
@@ -117,15 +117,22 @@ export async function updateLikeOnPost(id: number) {
 }
 
 export async function createPost(request: CreatePostRequest) {
-  //Create Post
-  const post: Post = {
-    ...request,
-    id: mockPosts!.length + 1,
-    createdAt: new Date(),
-    likes: 0,
-    commentsCount: 0,
-  }
-  mockPosts?.push(post)
+  const { follower } = useAuth()
 
-  return post
+  if (follower.value) {
+    const post: Post = {
+      ...request,
+      id: mockPosts!.length + 1,
+      by: follower.value,
+      createdAt: new Date(),
+      likes: 0,
+      commentsCount: 0,
+    }
+
+    mockPosts?.push(post)
+
+    return post
+  } else {
+    throw Error('User is not logged in probably')
+  }
 }

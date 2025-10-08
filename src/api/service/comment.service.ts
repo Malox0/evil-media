@@ -2,6 +2,7 @@ import { getFollowerByUsername } from './follower.service'
 import { getPostById } from './post.service'
 import type { Comment, CreateCommentRequest } from '../../types/comment'
 import type { Post } from '@/types/post'
+import { useAuth } from '@/auth/useAuth'
 
 let mockComments: Comment[] | null = null
 
@@ -79,26 +80,30 @@ export async function getCommentsByUsername(username: string) {
 
 export async function createComment(text: string, postId: number) {
   const comments = await getComments()
-  const user = await getFollowerByUsername('maxi')
   const post = await getPostById(postId)
+  const { follower } = useAuth()
 
-  const body: CreateCommentRequest = {
-    text: text,
-    userId: 'username',
-    postId: postId,
+  if (follower.value) {
+    const body: CreateCommentRequest = {
+      text: text,
+      userId: follower.value.username,
+      postId: postId,
+    }
+
+    const newComment: Comment = {
+      id: comments.length + 1,
+      text: body.text,
+      likes: 0,
+      uploadDate: 'just now',
+      post: post,
+      by: follower.value,
+    }
+    comments.push(newComment)
+
+    return newComment
+  } else {
+    throw Error('User probably not logged in')
   }
-
-  const newComment: Comment = {
-    id: comments.length + 1,
-    text: body.text,
-    likes: 0,
-    uploadDate: 'just now',
-    post: post,
-    by: user,
-  }
-  comments.push(newComment)
-
-  return newComment
 }
 
 export async function updateLikeOnComment(commentId: number, postId: number) {
