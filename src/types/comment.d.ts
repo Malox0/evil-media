@@ -4,7 +4,7 @@ export interface Comment {
   id: number
   text: string
   likes: number
-  uploadDate: string
+  createdAt: Date
   post: Post
   by: Follower
   likedByClient?: boolean

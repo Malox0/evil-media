@@ -4,7 +4,7 @@ export interface UserProfile {
   firstname: string
   lastname: string
   description: string
-  createdAt: string
+  createdAt: Date
   ipAddress: string
   avatarUrl?: string
 }
@@ -29,4 +29,16 @@ export interface EditFollowerRequest {
   description: string
   ipAddress: string
   avatarUrl?: string
+}
+
+export interface CreateUserProfileRequest {
+  username: string
+  firstname: string
+  lastname: string
+  email: string
+  password: string
+  description: string
+  ipAddress: string
+  avatarUrl?: string
+  avatarFile?: File
 }

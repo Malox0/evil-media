@@ -6,7 +6,6 @@ import Profile from '../auth/Profile.vue'
 <template>
   <v-app-bar fixed title="Evil Media">
     <template #append>
-      <v-btn icon="mdi-bell"></v-btn>
       <CreatePost />
 
       <Profile></Profile>

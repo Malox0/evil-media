@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CreatePostRequest, Post } from '@/types/post'
 import type { Follower } from '@/types/follower'
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch } from 'vue'
 import { createPost } from '@/api/service/post.service'
 import { useRouter } from 'vue-router'
 
@@ -11,7 +11,7 @@ const clientFollower: Follower = {
   firstname: 'Maximilian',
   lastname: 'Busch',
   followed: true,
-  createdAt: '2025-10-01',
+  createdAt: new Date(),
   ipAddress: '192.168.0.1',
   followerCount: 20,
   description: 'This is a test',

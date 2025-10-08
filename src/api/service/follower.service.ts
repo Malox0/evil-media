@@ -1,4 +1,5 @@
-import type { EditFollowerRequest, Follower } from '../../types/follower'
+import { useAuth } from '@/auth/useAuth'
+import type { CreateUserProfileRequest, EditFollowerRequest, Follower } from '../../types/follower'
 
 let mockFollowers: Follower[] | null = null
 
@@ -11,7 +12,7 @@ function initFollowers() {
         firstname: 'Maximilian',
         lastname: 'Busch',
         followed: true,
-        createdAt: '2025-10-01',
+        createdAt: new Date('2025-10-01T10:15:00Z'),
         ipAddress: '192.168.0.1',
         followerCount: 20,
         description: 'This is a test',
@@ -25,7 +26,7 @@ function initFollowers() {
         firstname: 'Johnny',
         lastname: 'Silverhand',
         followed: false,
-        createdAt: '2025-10-02',
+        createdAt: new Date('2025-10-01T10:15:00Z'),
         ipAddress: '192.168.0.2',
         followerCount: 20,
         description: 'This is a test',
@@ -39,7 +40,7 @@ function initFollowers() {
         firstname: 'Lara',
         lastname: 'Croft',
         followed: true,
-        createdAt: '2025-10-03',
+        createdAt: new Date('2025-10-01T10:15:00Z'),
         ipAddress: '192.168.0.3',
         followerCount: 20,
         description: 'This is a test',
@@ -95,4 +96,22 @@ export async function editFollower(request: EditFollowerRequest) {
   mockFollowers![index!] = newFollower
 
   return Promise.resolve(newFollower)
+}
+
+export async function createFollower(request: CreateUserProfileRequest) {
+  const newUser: Follower = {
+    ...request,
+    createdAt: new Date(),
+    followed: true,
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 0,
+    id: mockFollowers!.length + 1,
+  }
+
+  mockFollowers?.push(newUser)
+
+  const { login } = useAuth()
+  login()
+  return Promise.resolve(newUser)
 }

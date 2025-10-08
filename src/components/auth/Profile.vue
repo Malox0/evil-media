@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuth } from '../../auth/useAuth'
+import RegisterForm from '../auth/RegisterForm.vue'
 
 const { follower, state, username, login, register, logout } = useAuth()
 </script>
@@ -18,9 +19,7 @@ const { follower, state, username, login, register, logout } = useAuth()
       <v-list-item key="login" value="Login" @click="login">
         <v-icon icon="mdi-login" class="mr-1" />Login</v-list-item
       >
-      <v-list-item key="register" value="Register" @click="register"
-        ><v-icon icon="mdi-account-plus" class="mr-1" />Register</v-list-item
-      >
+      <RegisterForm />
     </v-list>
 
     <v-list v-else>

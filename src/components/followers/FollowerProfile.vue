@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type { EditFollowerRequest, Follower } from '../../types/follower'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useAuth } from '../../auth/useAuth'
 import { editFollower } from '../../api/service/follower.service'
-const publicIp = ref<string>('')
 
 interface Props {
   follower: Follower
@@ -14,24 +13,23 @@ const props = withDefaults(defineProps<Props>(), {
   disableFollowBtn: false,
 })
 
-const editRequest = ref<EditFollowerRequest>({ ...props.follower })
-const isMe = computed(() => {
-  return clientFollower.value?.username === props.follower.username
-})
-
 const { follower: clientFollower } = useAuth()
 
 const editProfile = ref<boolean>(false)
 
-onMounted(async () => {
-  try {
-    const res = await fetch('https://api.ipify.org?format=json')
-    const data = await res.json()
-    publicIp.value = data.ip
-  } catch (err) {
-    throw err
-  }
-})
+const isMe = ref(false)
+const editRequest = ref<EditFollowerRequest>({ ...props.follower })
+
+watch(
+  () => props.follower.username,
+  (newUsername) => {
+    isMe.value = clientFollower.value?.username === newUsername
+    if (isMe && clientFollower.value) {
+      editRequest.value = { ...clientFollower.value }
+    }
+  },
+  { immediate: true },
+)
 
 const fileInput = ref<HTMLInputElement | null>(null)
 
@@ -179,7 +177,7 @@ async function saveChanges() {
         ><v-icon>mdi-calendar-blank-outline</v-icon> Joined {{ follower.createdAt }}</v-card-text
       >
       <v-card-text class="opacity-70 mb-n4 mt-n4"
-        ><v-icon>mdi-map-marker</v-icon> {{ publicIp }}</v-card-text
+        ><v-icon>mdi-map-marker</v-icon> {{ follower.ipAddress }}</v-card-text
       >
       <div class="d-flex flex-row justify-space-between">
         <div class="d-flex align-center">
