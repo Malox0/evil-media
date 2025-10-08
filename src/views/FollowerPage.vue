@@ -11,6 +11,7 @@ import { getFollowerByUsername } from '@/api/service/follower.service'
 import { isLoading } from '@/routes'
 import { getPosts, getPostsByUsername } from '@/api/service/post.service'
 import type { Post } from '@/types/post'
+import UserCard from '@/components/user/UserCard.vue'
 
 const route = useRoute()
 const username = route.params.username as string
@@ -31,6 +32,16 @@ onMounted(async () => {
   selected.value = 'Posts'
   contentLoading.value = false
 })
+
+async function reloadFollower() {
+  contentLoading.value = true
+  follower.value = await getFollowerByUsername(username)
+  contentLoading.value = false
+}
+
+const emit = defineEmits<{
+  (e: 'reloadFollower'): void
+}>()
 
 const posts = ref<Post[]>()
 onMounted(async () => {
@@ -58,7 +69,11 @@ onMounted(async () => {
     class="mx-auto border"
     type="card-avatar, actions"
   ></v-skeleton-loader>
-  <FollowerProfile v-if="!contentLoading && follower" :follower="follower" />
+  <FollowerProfile
+    v-if="!contentLoading && follower"
+    :follower="follower"
+    @reloadFollower="reloadFollower"
+  />
 
   <v-skeleton-loader
     v-if="toggleLoading"
@@ -101,6 +116,7 @@ onMounted(async () => {
     v-if="!toggleLoading && selected === 'Comments'"
     :disable-follow-btn="false"
     :username="follower?.username"
+    :variant="'flat'"
   />
   <ListFollowers v-if="!toggleLoading && selected === 'Following'" :username="follower?.username" />
 </template>

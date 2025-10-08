@@ -1,52 +1,61 @@
-import type { Follower } from '../../types/follower'
+import type { EditFollowerRequest, Follower } from '../../types/follower'
 
+let mockFollowers: Follower[] | null = null
+
+function initFollowers() {
+  if (!mockFollowers) {
+    mockFollowers = [
+      {
+        id: 1,
+        username: 'maxi',
+        firstname: 'Maximilian',
+        lastname: 'Busch',
+        followed: true,
+        createdAt: '2025-10-01',
+        ipAddress: '192.168.0.1',
+        followerCount: 20,
+        description: 'This is a test',
+        followingCount: 11,
+        postCount: 4,
+        avatarUrl: `https://ui-avatars.com/api/?name=Maximilian+Busch`,
+      },
+      {
+        id: 2,
+        username: 'johnny',
+        firstname: 'Johnny',
+        lastname: 'Silverhand',
+        followed: false,
+        createdAt: '2025-10-02',
+        ipAddress: '192.168.0.2',
+        followerCount: 20,
+        description: 'This is a test',
+        followingCount: 11,
+        postCount: 4,
+        avatarUrl: `https://ui-avatars.com/api/?name=Johnny+Silverhand`,
+      },
+      {
+        id: 3,
+        username: 'lara',
+        firstname: 'Lara',
+        lastname: 'Croft',
+        followed: true,
+        createdAt: '2025-10-03',
+        ipAddress: '192.168.0.3',
+        followerCount: 20,
+        description: 'This is a test',
+        followingCount: 11,
+        postCount: 4,
+        avatarUrl: `https://ui-avatars.com/api/?name=Lara+Croft`,
+      },
+    ]
+  }
+
+  return mockFollowers
+}
 export async function getFollowers(): Promise<Follower[]> {
-  const mockFollowers: Follower[] = [
-    {
-      id: 1,
-      username: 'maxi',
-      firstname: 'Maximilian',
-      lastname: 'Busch',
-      followed: true,
-      createdAt: '2025-10-01',
-      ipAddress: '192.168.0.1',
-      followerCount: 20,
-      description: 'This is a test',
-      followingCount: 11,
-      postCount: 4,
-      avatarUrl: `https://ui-avatars.com/api/?name=Maximilian+Busch`,
-    },
-    {
-      id: 2,
-      username: 'johnny',
-      firstname: 'Johnny',
-      lastname: 'Silverhand',
-      followed: false,
-      createdAt: '2025-10-02',
-      ipAddress: '192.168.0.2',
-      followerCount: 20,
-      description: 'This is a test',
-      followingCount: 11,
-      postCount: 4,
-      avatarUrl: `https://ui-avatars.com/api/?name=Johnny+Silverhand`,
-    },
-    {
-      id: 3,
-      username: 'lara',
-      firstname: 'Lara',
-      lastname: 'Croft',
-      followed: true,
-      createdAt: '2025-10-03',
-      ipAddress: '192.168.0.3',
-      followerCount: 20,
-      description: 'This is a test',
-      followingCount: 11,
-      postCount: 4,
-      avatarUrl: `https://ui-avatars.com/api/?name=Lara+Croft`,
-    },
-  ]
+  const followers: Follower[] = initFollowers()
 
-  return Promise.resolve(mockFollowers)
+  return Promise.resolve(followers)
 }
 
 export async function getFollowerByUsername(username: string): Promise<Follower> {
@@ -67,4 +76,23 @@ export async function getFollowing(username: string): Promise<Follower[]> {
   }
 
   return following
+}
+
+export async function editFollower(request: EditFollowerRequest) {
+  const oldFollower = await getFollowerByUsername(request.username)
+  const newFollower: Follower = {
+    ...request,
+    createdAt: oldFollower.createdAt,
+    ipAddress: oldFollower.ipAddress,
+    followed: oldFollower.followed,
+    followerCount: oldFollower.followerCount,
+    followingCount: oldFollower.followingCount,
+    postCount: oldFollower.postCount,
+  }
+
+  const index = mockFollowers?.findIndex((t) => t.username == newFollower.username)
+
+  mockFollowers![index!] = newFollower
+
+  return Promise.resolve(newFollower)
 }
